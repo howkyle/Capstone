@@ -1,0 +1,17 @@
+{%extends  "base.html"%}
+
+{%block main%}
+<form>
+	{{form.fname.label}}
+	{{form.fname}}
+	{{form.lname.label}}
+	{{form.lname}}
+	{{form.studentID.label}}
+	{{form.studentID}}
+	{{form.password.label}}
+	{{form.password}}
+	{{form.confPassword.label}}
+	{{form.confPassword}}
+<input type="submit" name="SignUp">
+</form>
+{%endblock%}
