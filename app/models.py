@@ -1,15 +1,17 @@
 from . import db
 
+
 class Student(db.Model):
 	studentID = db.Column(db.String, primary_key = True)
 	first_name = db.Column(db.String(50))
 	last_name = db.Column(db.String(50))
 	password = db.Column(db.String(50))
 	csec_subjects = db.relationship("Studied")
-	authenticated = db.Column(db.Boolean, default = False)
+	chosen_subjects = db.relationship("Application")
+	authenticated = db.Column(db.Boolean, default = True)
 
 	def is_authenticated(self):
-		return self.autheicated
+		return self.authenticated
 
 	def is_active(self):
 		return True
@@ -19,27 +21,34 @@ class Student(db.Model):
 
 
 	def get_id(self):
-		return str(self.id)
+		return str(self.studentID)
 
 	def __repr__(self):
 		return "<Student %r>" %(self.studentID)
 
-class CsecSubject(db.Model):
-	subjectName = db.Column(db.String(50), primary_key =True)
+
+class Csec(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	subjectName = db.Column(db.String(50))
 	studied = db.relationship("Studied")
+
 
 class Studied(db.Model):
 	id = db.Column(db.Integer(),primary_key = True)
-	studentID= db.Column(db.String(50), db.ForeignKey('student.id'))
-	subjectName=  db.Column(db.String(50),db.ForeignKey('csecsubject.subjectName'))
+	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
+	grade = db.Column(db.String(5))
+	subjectID=  db.Column(db.Integer,db.ForeignKey('csec.id'))
 
-class CapeSubject(db.Model):
-	subjectName = db.Column(db.String(80), primary_key = True)
+
+class Cape(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	subjectName = db.Column(db.String(80))
 	application = db.relationship("Application")
+
 
 class Application(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
-	studentID= db.Column(db.String(50), db.ForeignKey('student.id'))
-	subjectName=  db.Column(db.String(50),db.ForeignKey('capesubject.subjectName'))
+	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
+	subjectID=  db.Column(db.Integer,db.ForeignKey('cape.id'))
 
 

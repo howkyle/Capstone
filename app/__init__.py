@@ -6,10 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 USERNAME = ""
 PASSWORD = ""
-DATABASE_URI=""
+DATABASE_URI="postgresql://capstone:password@localhost/capstone"
 
 
-SECRET_KEY="I hope no one finds out this key, it woild be dreadful"
+SECRET_KEY="I hope no one finds out this key, it would be dreadful"
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=SECRET_KEY
