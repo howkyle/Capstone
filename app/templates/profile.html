@@ -1,7 +1,26 @@
 {%extends "base.html"%}
 
+{%block head%}
+<script type="text/javascript" src = "static/js/app.js"></script>
+{%endblock%}
+
 {%block main%}
 {{student.studentID}}
 {{student.first_name}}
 {{student.last_name}}
+{{current_user}}
+<div class="app" ng-app="SubjectSelectionApp" >
+	
+	<div class="subjects" ng-controller="CsecCtrl">
+		<select ng-model ="selectCsec" ng-options="subject for subject in subjects"></select>
+		<select ng-model ="selectCsecGrade" ng-options="grade for grade in grades"></select>
+	</div>
+
+	<div class="cape" ng-controller="CapeCtrl">
+	
+	</div>
+
+	
+
+</div>
 {%endblock%}
