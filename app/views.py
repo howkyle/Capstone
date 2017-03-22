@@ -1,6 +1,6 @@
 
 from app import app, db, login_manager
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from forms import *
 from models import *
@@ -46,6 +46,17 @@ def login():
 @app.route("/profile", methods=["POST", "GET"])
 @login_required
 def profile():
+	if request.method == "POST":
+		sub_list = []
+		subjects = Csec.query.all()
+		for subject in subjects:
+			sub_list.append(str(subject.subjectName))
+
+		# # thing = jsonify(name = subjects.subjectName)
+		# print (sub_list)
+		return jsonify(sub_list)
+		
+
 	studentID = current_user.get_id()
 	student = Student.query.filter_by(studentID= studentID).first()
 	if student:
