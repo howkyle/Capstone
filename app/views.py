@@ -4,6 +4,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from forms import *
 from models import *
+import json
 
 @app.route('/')
 def home():
@@ -46,21 +47,51 @@ def login():
 @app.route("/profile", methods=["POST", "GET"])
 @login_required
 def profile():
-	if request.method == "POST":
-		sub_list = []
-		subjects = Csec.query.all()
-		for subject in subjects:
-			sub_list.append(str(subject.subjectName))
-
-		# # thing = jsonify(name = subjects.subjectName)
-		# print (sub_list)
-		return jsonify(sub_list)
-		
-
 	studentID = current_user.get_id()
-	student = Student.query.filter_by(studentID= studentID).first()
-	if student:
-		return render_template("profile.html", student = student)
+	if request.method == "POST":
+		print "POST"
+		print request.headers["Content-Type"]
+		if request.headers["Content-Type"] == 'csec-subjects':
+			csecSubjects = json.loads(request.data)
+			for sub in csecSubjects:
+				db.session.add(Studied(studentID = studentID,grade = sub['grade'],subjectName=sub['subjectName']))
+			db.session.commit()
+
+			return jsonify(request.data)
+
+		if request.headers["Content-Type"] == 'cape-subjects':
+			capeSubjects = json.loads(request.data)
+			for sub in capeSubjects:
+				db.session.add(Application(studentID = studentID,subjectName=sub['subjectName']))
+			db.session.commit()
+			
+			return jsonify(request.data)
+
+
+	elif request.method  == "GET":
+
+		if request.headers['Accept'] =="csec-list":
+			# returns list of csec subjects from the database to the angular front end
+			sub_list = []
+			subjects = Csec.query.all()
+			for subject in subjects:
+				sub_list.append(str(subject.subjectName))
+
+			return jsonify(sub_list)
+
+		if request.headers['Accept'] == "cape-list":
+			# returns list of cape subjects from the database to the angular front end
+			sub_list = []
+			subjects = Cape.query.all()
+			for subject in subjects:
+				# print subject
+				sub_list.append(str(subject.subjectName))
+
+			return jsonify(sub_list)
+
+		student = Student.query.filter_by(studentID= studentID).first()
+		if student:
+			return render_template("profile.html", student = student)
 
 @login_manager.user_loader
 def load_user(id):

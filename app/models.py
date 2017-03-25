@@ -28,8 +28,8 @@ class Student(db.Model):
 
 
 class Csec(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	subjectName = db.Column(db.String(50), unique  = True)
+	# id = db.Column(db.Integer, primary_key = True)
+	subjectName = db.Column(db.String(50), primary_key  = True)
 	studied = db.relationship("Studied")
 
 
@@ -37,18 +37,18 @@ class Studied(db.Model):
 	id = db.Column(db.Integer(),primary_key = True)
 	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
 	grade = db.Column(db.String(5))
-	subjectID=  db.Column(db.Integer,db.ForeignKey('csec.id'))
+	subjectName=  db.Column(db.String(50),db.ForeignKey('csec.subjectName'))
 
 
 class Cape(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	subjectName = db.Column(db.String(80))
+	# id = db.Column(db.Integer, primary_key = True)
+	subjectName = db.Column(db.String(80), primary_key  = True)
 	application = db.relationship("Application")
 
 
 class Application(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
 	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
-	subjectID=  db.Column(db.Integer,db.ForeignKey('cape.id'))
+	subjectName= db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
 
 

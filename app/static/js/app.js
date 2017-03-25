@@ -1,16 +1,44 @@
 var app =angular.module("SubjectSelectionApp", []);
 
-app.controller('CsecCtrl',['$scope','csecList', function($scope,csecList){
-	// $scope.subjects = ["Mathematics","Additional Mathematics","Biology", "Chemistry","Physics","Technical Drawing","French","Spanish","Art","Information Technology"]
-	csecList.success(function(data){
-		console.log(data);
-		$scope.subjects = data
+app.controller('CsecCtrl',['$scope','subjectList','submitSubjects', function($scope,subjectList,submitSubjects){
+	
+	subjectList.csecList().then(function(response){
+		// console.log(data);
+		$scope.subjects = response.data
 	});
+
 	$scope.grades = ["I","II","III","IV","V","VI","U"]
+
+	$scope.studied=[]
+
+	$scope.addSubject = function(){
+		$scope.studied.push({})
+		console.log($scope.studied)
+	}
+
+	$scope.submitSubs = function(){
+		data = $scope.studied
+		submitSubjects.submitCsec(data)
+	}
 }]);
 
 
-app.controller('CapeCtrl', ['$scope', function($scope){
-}])
+app.controller('CapeCtrl', ['$scope', 'subjectList','submitSubjects',function($scope,subjectList,submitSubjects){
+	subjectList.capeList().then(function (response) {
+		$scope.subjects = response.data
+
+		$scope.applied=[]
+
+		$scope.addSubject = function(){
+			$scope.applied.push({})
+			console.log($scope.applied)
+		}
+
+		$scope.submitSubs = function(){
+		data = $scope.applied
+		submitSubjects.submitCape(data)
+	}
+	})
+}]);
 	
 	 
