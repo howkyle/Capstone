@@ -31,6 +31,7 @@ class Csec(db.Model):
 	# id = db.Column(db.Integer, primary_key = True)
 	subjectName = db.Column(db.String(50), primary_key  = True)
 	studied = db.relationship("Studied")
+	cape  = db.relationship("Cape")
 
 
 class Studied(db.Model):
@@ -43,6 +44,8 @@ class Studied(db.Model):
 class Cape(db.Model):
 	# id = db.Column(db.Integer, primary_key = True)
 	subjectName = db.Column(db.String(80), primary_key  = True)
+	capacity = db.Column(db.Integer())
+	prequisiteSubject = db.Column(db.String(80), db.ForeignKey('csec.subjectName'))
 	application = db.relationship("Application")
 
 

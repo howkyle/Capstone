@@ -49,12 +49,15 @@ def login():
 def profile():
 	studentID = current_user.get_id()
 	if request.method == "POST":
-		print "POST"
 		print request.headers["Content-Type"]
 		if request.headers["Content-Type"] == 'csec-subjects':
 			csecSubjects = json.loads(request.data)
 			for sub in csecSubjects:
-				db.session.add(Studied(studentID = studentID,grade = sub['grade'],subjectName=sub['subjectName']))
+				result = Studied.query.filter_by(studentID=studentID, subjectName = sub['subjectName']).first()
+				if result:
+					print ("already added that subject")
+				else:
+					db.session.add(Studied(studentID = studentID,grade = sub['grade'],subjectName=sub['subjectName']))
 			db.session.commit()
 
 			return jsonify(request.data)
