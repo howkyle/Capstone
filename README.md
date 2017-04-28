@@ -11,3 +11,8 @@ Final Year Project
 
 <!-- enable prerequisite barring -->
 
+
+<!-- OVERHAUL STRUCTURE TO API BASED -->
+<!-- add security features like sending encrypted passwords -->
+
+

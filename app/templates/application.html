@@ -1,10 +1,12 @@
-{%extends "base.html"%}
+{% extends base.html %}
 
 {%block head%}
 <script type="text/javascript" src = "/static/js/app.js"></script>
 <script type="text/javascript" src = "/static/js/services/getSubjectList.js"></script>
 <script type="text/javascript" src = "/static/js/services/submitSubjects.js"></script>
-{%endblock%}
+
+{% endblock %}
+
 
 {%block main%}
 {{student.studentID}}
@@ -12,23 +14,17 @@
 {{student.last_name}}
 {{current_user}}
 
-<div class="app" ng-app="SubjectSelectionApp" >
-	
-	<div class="CsecSubjects" ng-controller="CsecCtrl">
-		<h2>Add Csec Subjects</h2>
+<div class="cape" ng-controller="CapeCtrl">
+
+		<h2>Choose CAPE Subjects</h2>
+
 		<button ng-click ="addSubject()">Add Subject</button>
-		<div class="csecList" ng-repeat="sub in studied track by $index">
+		<div class="csecList" ng-repeat="sub in applied track by $index">
 			<select ng-model ="sub.subjectName" ng-options="subject for subject in subjects"></select>
-			<select ng-model ="sub.grade" ng-options="grade for grade in grades"></select>
 		</div>
 		<button ng-click="submitSubs()">Submit Subjects</button>
 
-		
+	
 	</div>
 
-	
-
-	
-
-</div>
 {%endblock%}

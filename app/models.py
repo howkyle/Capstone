@@ -6,8 +6,8 @@ class Student(db.Model):
 	first_name = db.Column(db.String(50))
 	last_name = db.Column(db.String(50))
 	password = db.Column(db.String(50))
-	csec_subjects = db.relationship("Studied")
-	chosen_subjects = db.relationship("Application")
+	csec_subjects = db.relationship("Studied", backref='student', cascade="all, delete-orphan" , lazy='dynamic')
+	chosen_subjects = db.relationship("Application",backref='student', cascade="all, delete-orphan" , lazy='dynamic')
 	authenticated = db.Column(db.Boolean, default = True)
 
 	def is_authenticated(self):
@@ -23,8 +23,21 @@ class Student(db.Model):
 	def get_id(self):
 		return str(self.studentID)
 
+	# def __init__(self, sid, fname, lname, password):
+	# 	self.studentID = sid
+	# 	self.first_name = fname
+	# 	self.last_name = lname
+	# 	self.password = password
+	# 	self.csec_subjects =[]
+	# 	self.chosen_subjects = []
+
 	def __repr__(self):
 		return "<Student %r>" %(self.studentID)
+
+
+	@property
+	def json(self):
+		return {'id': self.studentID,'fname': self.first_name,'lname': self.last_name}
 
 
 class Csec(db.Model):

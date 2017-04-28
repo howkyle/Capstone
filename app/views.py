@@ -8,24 +8,37 @@ import json
 
 @app.route('/')
 def home():
-	return render_template("home.html")
+	return render_template("app.html")
 
-@app.route('/signup',methods =["GET","POST"])
+@app.route('/api/register',methods =["POST"])
 def signUp():
-	form = SignUpForm()
+	# form = SignUpForm()
 	if request.method == "POST":
-		print("post \n\n\n\n\n")
-		if form.validate_on_submit():
-			fname = form.fname.data
-			lname = form.lname.data
-			print (lname)
-			studID = form.studentID.data
-			password = form.confPassword.data
-
-			student = Student(studentID = studID, first_name = fname, last_name = lname, password = password)
+		response = { "status": 'null', "data":'null', "message": 'null'}
+		# print("post \n\n\n\n\n")
+		# if form.validate_on_submit():
+		# 	fname = form.fname.data
+		# 	lname = form.lname.data
+		# 	print (lname)
+		# 	studID = form.studentID.data
+		# 	password = form.confPassword.data
+		try:
+			data = json.loads(request.data)
+			print data["fname"]
+			student = Student(studentID = data["id"], first_name = data["fname"], last_name = data["lname"], password = data["password"])
+			print student.json
 			db.session.add(student)
 			db.session.commit()
-			return redirect(url_for('login'))
+		except:
+			response['status'] = "error"
+			response["message"]="registration error"
+			return jsonify(response)
+		else:
+			response["status"] ="success"
+			response["message"] ="successful registration"
+			response["data"] = student.json
+			return jsonify(response)
+
 
 	return render_template("signup.html", form = form)
 
@@ -42,7 +55,7 @@ def login():
 				print("login in successful")
 				return redirect(url_for('profile'))
 
-	return render_template("login.html", form = form), 
+	return render_template("login.html", form = form)
 
 @app.route("/profile", methods=["POST", "GET"])
 @login_required
