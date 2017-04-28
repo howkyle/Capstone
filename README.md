@@ -1,11 +1,9 @@
 # Capstone
 Final Year Project
 
-<!-- Ensure that students cant apply to same subjects more than once. -->
+<!-- Ensure that students cant apply to same subjects more than once. --> Done
 
 <!-- ensure that subjects are applied for in order of priority -->
-
-<!-- ensure that students cant access cape div until they've applied for subjects -->
 
 <!-- flash messages across screen -->
 
@@ -14,5 +12,7 @@ Final Year Project
 
 <!-- OVERHAUL STRUCTURE TO API BASED -->
 <!-- add security features like sending encrypted passwords -->
+<!-- flash messages on screen -->
+implement nics algorithm
 
 

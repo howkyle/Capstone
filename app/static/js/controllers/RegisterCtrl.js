@@ -1,6 +1,6 @@
 app.controller('RegisterCtrl', ['$scope','$location','$http', function($scope,$location,$http){
 	if(localStorage.userID != null){
-		$location.url("/landing")
+		$location.url("/home")
 	}
 
 	$scope.register = function(){
@@ -21,6 +21,11 @@ app.controller('RegisterCtrl', ['$scope','$location','$http', function($scope,$l
 
 		$http.post(url, data, config).then(function(response){
 			console.log(response.data)
+			if(response.data.status =="success"){
+				$location.url('/')
+			}else{
+				console.log(response.data.message)
+			}
 		})
 	}
 	

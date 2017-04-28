@@ -42,18 +42,32 @@ def signUp():
 
 	return render_template("signup.html", form = form)
 
-@app.route('/login', methods=["GET","POST"])
+@app.route('/api/login', methods=["POST"])
 def login():
-	form = LoginForm()
+	# form = LoginForm()
 	if request.method== "POST":
-		if form.validate_on_submit():
-			studentID = form.studentID.data
-			password = form.password.data
-			student = Student.query.filter_by(studentID = studentID, password = password).first()
+		response = { "status": 'null', "data":'null', "message": 'null'}
+		# if form.validate_on_submit():
+		# 	studentID = form.studentID.data
+		# 	password = form.password.data
+		data = json.loads(request.data)
+		try:
+			student = Student.query.filter_by(studentID = data["id"], password = data["password"]).first()
+		except:
+			response["status"] ="error"
+			response["message"] = "error encountered trying to log in"
+			return jsonify(response)
+		else:
 			if student:
-				login_user(student)
-				print("login in successful")
-				return redirect(url_for('profile'))
+				response["status"]="success"
+				response["message"]="successful login"
+				response["data"]= student.json
+				return jsonify(response)
+			else:
+				response["status"]="error"
+				response["message"]="incorrect credentials"
+				return jsonify(response)
+
 
 	return render_template("login.html", form = form)
 
