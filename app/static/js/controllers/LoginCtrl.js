@@ -1,8 +1,10 @@
 app.controller('LoginCtrl', ['$scope','$http','$location', function($scope,$http,$location){
 
 	if(localStorage.userID != null){
+		// $scope.showNav = true
 		$location.url("/home")
-	}	
+	}
+	// $scope.showNav = false	
 
 	$scope.login = function(){
 		url = '/api/login'
@@ -23,6 +25,7 @@ app.controller('LoginCtrl', ['$scope','$http','$location', function($scope,$http
 				localStorage.setItem("userID",response.data.data.id)
 				localStorage.setItem("fname",response.data.data.fname)
 				localStorage.setItem("lname",response.data.data.lname)
+				$scope.logged = true
 				$location.url('/home')
 			}
 			else{

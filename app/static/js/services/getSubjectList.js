@@ -14,13 +14,13 @@ app.factory('subjectList', ['$http', function($http){
 
 	return{		
 			capeList:function(data){
-				return $http.get('/profile', { 
+				return $http.get('/api/subjects', { 
 					headers : { 'Accept': "cape-list"}
 				})
 			},
 
 			csecList:function(data){
-				return $http.get('/profile', { 
+				return $http.get('/api/subjects', { 
 					headers : { 'Accept': "csec-list"} //request the list of csec subjects from flask database
 				})
 			}

@@ -1,7 +1,9 @@
 app.controller('RegisterCtrl', ['$scope','$location','$http', function($scope,$location,$http){
 	if(localStorage.userID != null){
+		// $scope.showNav = true
 		$location.url("/home")
 	}
+	// $scope.showNav = false
 
 	$scope.register = function(){
 		url = "/api/register"

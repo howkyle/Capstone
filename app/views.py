@@ -71,12 +71,10 @@ def login():
 
 	return render_template("login.html", form = form)
 
-@app.route("/profile", methods=["POST", "GET"])
-@login_required
-def profile():
-	studentID = current_user.get_id()
+@app.route("/api/submit/<studentID>", methods = ["POST"])
+def submitSubjects(studentID):
 	if request.method == "POST":
-		print request.headers["Content-Type"]
+		response = { "status": 'null', "data":'null', "message": 'null'}
 		if request.headers["Content-Type"] == 'csec-subjects':
 			csecSubjects = json.loads(request.data)
 			for sub in csecSubjects:
@@ -85,20 +83,63 @@ def profile():
 					print ("already added that subject")
 				else:
 					db.session.add(Studied(studentID = studentID,grade = sub['grade'],subjectName=sub['subjectName']))
-			db.session.commit()
-
-			return jsonify(request.data)
+			try:	
+				db.session.commit()
+			except:
+				response["status"]="error"
+				response["message"]="error adding subjects"
+				return jsonify(response)
+			else:
+				response["status"]="success"
+				response["message"]="subjects successfully added"
+				return jsonify(response)
 
 		if request.headers["Content-Type"] == 'cape-subjects':
 			capeSubjects = json.loads(request.data)
 			for sub in capeSubjects:
-				db.session.add(Application(studentID = studentID,subjectName=sub['subjectName']))
-			db.session.commit()
+				result = Application.query.filter_by(studentID=studentID, subjectName = sub['subjectName']).first()
+				if result:
+					print "already applied for that subject"
+				else:
+					db.session.add(Application(studentID = studentID,subjectName=sub['subjectName']))
+			try:
+				db.session.commit()
+			except:
+				response["status"]="error"
+				response["message"]="error applying for subjects"
+				return jsonify(response)
+			else:
+				response["status"]="success"
+				response["message"]="successful application"
+				return jsonify(response)
 			
-			return jsonify(request.data)
+
+@app.route("/api/subjects", methods=["GET"])
+def getSubjects():
+	# if request.method == "POST":
+	# 	print request.headers["Content-Type"]
+	# 	if request.headers["Content-Type"] == 'csec-subjects':
+	# 		csecSubjects = json.loads(request.data)
+	# 		for sub in csecSubjects:
+	# 			result = Studied.query.filter_by(studentID=studentID, subjectName = sub['subjectName']).first()
+	# 			if result:
+	# 				print ("already added that subject")
+	# 			else:
+	# 				db.session.add(Studied(studentID = studentID,grade = sub['grade'],subjectName=sub['subjectName']))
+	# 		db.session.commit()
+
+	# 		return jsonify(request.data)
+
+	# 	if request.headers["Content-Type"] == 'cape-subjects':
+	# 		capeSubjects = json.loads(request.data)
+	# 		for sub in capeSubjects:
+	# 			db.session.add(Application(studentID = studentID,subjectName=sub['subjectName']))
+	# 		db.session.commit()
+			
+	# 		return jsonify(request.data)
 
 
-	elif request.method  == "GET":
+	if request.method  == "GET":
 
 		if request.headers['Accept'] =="csec-list":
 			# returns list of csec subjects from the database to the angular front end
@@ -119,9 +160,9 @@ def profile():
 
 			return jsonify(sub_list)
 
-		student = Student.query.filter_by(studentID= studentID).first()
-		if student:
-			return render_template("profile.html", student = student)
+		# student = Student.query.filter_by(studentID= studentID).first()
+		# if student:
+		# 	return render_template("profile.html", student = student)
 
 @login_manager.user_loader
 def load_user(id):

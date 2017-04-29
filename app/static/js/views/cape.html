@@ -1,1 +1,9 @@
-choose your cape subjects
+<ng-include src="'static/js/views/nav.html'"></ng-include>
+
+<h2>Choose CAPE Subjects</h2>
+
+		<button class="btn-xs" ng-click ="addSubject()">+</button>
+		<div class="csecList" ng-repeat="sub in applied track by $index">
+			<select ng-model ="sub.subjectName" ng-options="subject for subject in subjects"></select>
+		</div>
+		<button ng-click="submitSubs()">Submit Subjects</button>

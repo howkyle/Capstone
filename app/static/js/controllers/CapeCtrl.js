@@ -1,4 +1,4 @@
-app.controller('CapeCtrl', ['$scope', 'subjectList','submitSubjects',function($scope,subjectList,submitSubjects){
+app.controller('CapeCtrl', ['$scope', 'subjectList','$http','$location',function($scope,subjectList,$http,$location){
 	subjectList.capeList().then(function (response) {
 		$scope.subjects = response.data
 
@@ -11,7 +11,17 @@ app.controller('CapeCtrl', ['$scope', 'subjectList','submitSubjects',function($s
 
 		$scope.submitSubs = function(){
 		data = $scope.applied
-		submitSubjects.submitCape(data)
-	}
+		$http.post('/api/submit/'+localStorage.userID,data,{
+
+				headers:{'Content-Type':"cape-subjects"}
+
+			}).then(function(response){
+				if(response.data.status =="success"){
+					$location.url("/home")
+				}else{
+					console.log( response.data.message)
+				}
+			})
+		}
 	})
 }]);
