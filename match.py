@@ -3,20 +3,12 @@ from app.models import *
 import json
 
 
-
-gradeDict = {"I":1,"II":2,"III":3,"IV":4,"V":5,"VI":6,"U":7}
-stud_list = []
-subject_list =[]
-
-capeSubjects= Cape.query.all()
-students = Student.query.all()
-
-
-class Student():
+class Applicant():
         def __init__(self, student_id, subjects, choices):
                 self.id = student_id
                 self.choices =[]
                 self.subjects =[]
+                self.successCount = 0
 
                 for subject in subjects:
                 	s = {}
@@ -44,11 +36,21 @@ class Student():
 	                c["subScore"] = c["preReqGrade"]*c["priority"]+(0.5*c["preReqGrade"])
                 	self.choices.append(c)
 
-                def choseSubject(subname):
+                @property
+                def successCount(self):
+                        return self.successCount
+
+                @successCount.setter
+                def successCount(self, value):
+                        self.successCount = value
+
+                def appliedFor(self,subname):
+                        # checks to see if the student applied for this subject
                         for choice in self.choices:
-                                if choice["subname"] = subname:
+                                if choice["subname"] == subname:
                                         return True
                         return False
+
          
 
 class Subject():
@@ -56,6 +58,7 @@ class Subject():
                 self.name = name
                 self.capacity = capacity
                 self.preReqs = preReqs
+                self.potentialStudents = [] #all students who applied for this course
                 self.enrolledStudents = [] #list of students enrolled in course.
 
         def enrollMany(self, students): #adds students from already sorted stack until capacity runs out.
@@ -75,19 +78,47 @@ class Subject():
                         print x.iden
 
 
-        def chooseStudents(self, stud_list):
+        def choosePotentialStudents(self, stud_list):
         # subject takes students with the lowest subScore for that subject
+                for stud in stud_list:
+                        for choice in stud.choices:
+                                if choice["subname"] == self.name:
+                                        self.potentialStudents.append((stud,choice["subScore"]))
+                                        print stud.id
+                                        print choice["subScore"]
+                                        print self.potentialStudents
+                                        break
 
 
+
+
+
+gradeDict = {"I":1,"II":2,"III":3,"IV":4,"V":5,"VI":6,"U":7}
+stud_list = []
+subject_list =[]
+
+capeSubjects= Cape.query.all()
 for subject in capeSubjects:
+        # adds each cape subject from the database to a list
         subject_list.append(Subject(subject.subjectName, subject.capacity,subject.prerequisiteSubject))
 
+students = Student.query.all()
 for student in students:
+        # makes a list of student objects to be used for matching 
 	subjects = Studied.query.filter_by(studentID = student.studentID)
 	choices = Application.query.filter_by(studentID = student.studentID)
-        stud_list.append(Student(student.studentID, subjects,choices))
+        stud_list.append(Applicant(student.studentID, subjects,choices))
 
 
+# TESTING
 for student in stud_list:
         print student.choices
+
+for sub in subject_list:
+        print sub.name
+        sub.choosePotentialStudents(stud_list)
+
+
+
+
 
