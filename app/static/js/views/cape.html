@@ -1,9 +1,9 @@
 <ng-include src="'static/js/views/nav.html'"></ng-include>
 
-<h2>Choose CAPE Subjects</h2>
+<h2>Choose CAPE Subjects In order of importance</h2>
 
 		<button class="btn-xs" ng-click ="addSubject()">+</button>
-		<div class="csecList" ng-repeat="sub in applied track by $index">
-			<select ng-model ="sub.subjectName" ng-options="subject for subject in subjects"></select>
+		<div class="csecList" ng-repeat="sub in applied track by $index" ng-init="sub.priority=$index+1">
+			<select ng-model ="sub.subject" ng-options="subject.name for subject in subjects"></select>
 		</div>
 		<button ng-click="submitSubs()">Submit Subjects</button>

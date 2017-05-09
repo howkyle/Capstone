@@ -2,7 +2,6 @@
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
-from forms import *
 from models import *
 import json
 
@@ -15,13 +14,6 @@ def signUp():
 	# form = SignUpForm()
 	if request.method == "POST":
 		response = { "status": 'null', "data":'null', "message": 'null'}
-		# print("post \n\n\n\n\n")
-		# if form.validate_on_submit():
-		# 	fname = form.fname.data
-		# 	lname = form.lname.data
-		# 	print (lname)
-		# 	studID = form.studentID.data
-		# 	password = form.confPassword.data
 		try:
 			data = json.loads(request.data)
 			print data["fname"]
@@ -44,12 +36,8 @@ def signUp():
 
 @app.route('/api/login', methods=["POST"])
 def login():
-	# form = LoginForm()
 	if request.method== "POST":
 		response = { "status": 'null', "data":'null', "message": 'null'}
-		# if form.validate_on_submit():
-		# 	studentID = form.studentID.data
-		# 	password = form.password.data
 		data = json.loads(request.data)
 		try:
 			student = Student.query.filter_by(studentID = data["id"], password = data["password"]).first()
@@ -74,7 +62,7 @@ def login():
 @app.route("/api/submit/<studentID>", methods = ["POST"])
 def submitSubjects(studentID):
 	if request.method == "POST":
-		response = { "status": 'null', "data":'null', "message": 'null'}
+		response = { "status": 'null', "data":'null', "message": ''}
 		if request.headers["Content-Type"] == 'csec-subjects':
 			csecSubjects = json.loads(request.data)
 			for sub in csecSubjects:
@@ -97,48 +85,38 @@ def submitSubjects(studentID):
 		if request.headers["Content-Type"] == 'cape-subjects':
 			capeSubjects = json.loads(request.data)
 			for sub in capeSubjects:
-				result = Application.query.filter_by(studentID=studentID, subjectName = sub['subjectName']).first()
+				subject = sub["subject"]
+				print "preeeeeresuisisite"
+				print subject["prerequisite"]
+				print "enddddddd\n\n"
+				prereqCheck = Studied.query.filter_by(studentID = studentID, subjectName = subject["prerequisite"]).first()
+				result = Application.query.filter_by(studentID=studentID, subjectName = subject["name"]).first()
 				if result:
+					response["message"]+="already applied for "+subject["name"]+";"
 					print "already applied for that subject"
+
 				else:
-					db.session.add(Application(studentID = studentID,subjectName=sub['subjectName']))
+					print prereqCheck
+					if  prereqCheck or subject["prerequisite"]=="None":
+						db.session.add(Application(studentID = studentID,subjectName=subject['name'],subjectPriority = sub["priority"]))
+					else:
+						response["message"]+= subject["name"]+" requires a prerequisite;"
+						print ("requires a prerequisite")
 			try:
 				db.session.commit()
 			except:
 				response["status"]="error"
-				response["message"]="error applying for subjects"
-				return jsonify(response)
+				response["message"]+="error applying for subjects"
+				# return jsonify(response)
 			else:
 				response["status"]="success"
-				response["message"]="successful application"
-				return jsonify(response)
+				response["message"]+="successful application;"
+		return jsonify(response)
 			
 
 @app.route("/api/subjects", methods=["GET"])
 def getSubjects():
-	# if request.method == "POST":
-	# 	print request.headers["Content-Type"]
-	# 	if request.headers["Content-Type"] == 'csec-subjects':
-	# 		csecSubjects = json.loads(request.data)
-	# 		for sub in csecSubjects:
-	# 			result = Studied.query.filter_by(studentID=studentID, subjectName = sub['subjectName']).first()
-	# 			if result:
-	# 				print ("already added that subject")
-	# 			else:
-	# 				db.session.add(Studied(studentID = studentID,grade = sub['grade'],subjectName=sub['subjectName']))
-	# 		db.session.commit()
-
-	# 		return jsonify(request.data)
-
-	# 	if request.headers["Content-Type"] == 'cape-subjects':
-	# 		capeSubjects = json.loads(request.data)
-	# 		for sub in capeSubjects:
-	# 			db.session.add(Application(studentID = studentID,subjectName=sub['subjectName']))
-	# 		db.session.commit()
-			
-	# 		return jsonify(request.data)
-
-
+	
 	if request.method  == "GET":
 
 		if request.headers['Accept'] =="csec-list":
@@ -156,13 +134,12 @@ def getSubjects():
 			subjects = Cape.query.all()
 			for subject in subjects:
 				# print subject
-				sub_list.append(str(subject.subjectName))
+				sub = {}
+				sub["name"]= str(subject.subjectName)
+				sub["prerequisite"] = str(subject.prerequisiteSubject)
+				sub_list.append(sub)
 
 			return jsonify(sub_list)
-
-		# student = Student.query.filter_by(studentID= studentID).first()
-		# if student:
-		# 	return render_template("profile.html", student = student)
 
 @login_manager.user_loader
 def load_user(id):

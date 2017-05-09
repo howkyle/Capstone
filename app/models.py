@@ -58,7 +58,7 @@ class Cape(db.Model):
 	# id = db.Column(db.Integer, primary_key = True)
 	subjectName = db.Column(db.String(80), primary_key  = True)
 	capacity = db.Column(db.Integer())
-	prequisiteSubject = db.Column(db.String(80), db.ForeignKey('csec.subjectName'))
+	prerequisiteSubject = db.Column(db.String(80), db.ForeignKey('csec.subjectName'))
 	application = db.relationship("Application")
 
 
@@ -66,5 +66,6 @@ class Application(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
 	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
 	subjectName= db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
+	subjectPriority = db.Column(db.Integer())
 
 
