@@ -1,4 +1,5 @@
 from app import db
+import names
 
 db.drop_all()
 db.create_all()
@@ -70,6 +71,19 @@ conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubje
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Sociology',30,'None');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Spanish',30,'Spanish');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Tourism',30,'None');")
+
+# dummy data for students
+
+subs = [('Principles of Accounts','Accounting'), ('Agricultural Science','Agricultural Science'), ('Mathematics','Applied Mathematics'), ('Visual Arts','Art And Design'), ('Biology','Biology'), ('Technical Drawing','Building And Mechanical Engineering Drawing'), ('None','Caribbean Studies'), ('Chemistry','Chemistry'), ('None','Communication Studies'), ('Information Technology','Computer Science'), ('None','Digital Media'), ('None','Electrical And Electronic Engineering Technology'), ('Economics','Economics'), ('None','Entrepreneurship'), ('None','Environmental Science'), ('None','Financial Services Studies'), ('None','Food And Nutrition'), ('French','French'), ('Geography','Geography'), ('None','Green Engineering'), ('Caribbean History','History'), ('Information Technology','Information Technology'), ('Mathematics','Integrated Mathematics'), ('Caribbean History','Law', 'Literatures In English'), ('Logistics And Supply Chain Operations'), ('Principles of Business','Management Of Business'), ('Theatre Arts','Performing Arts'), ('Physics','Physics'), ('None','Physical Education And Sport'), ('Mathematics','Pure Mathematics'), ('None','Sociology'), ('Spanish','Spanish'), ('None','Tourism')]
+cape = 
+
+
+for i in range(0,50):
+	idnum=62000000
+	fname = str(names.get_first_name())
+	lname = str(names.get_first_name())
+	password = "password"
+	conn.execute("insert into student(\"studentID\", \"first_name\",\"last_name\",\"password\")values("+str(idnum+i)+",'"+fname+"','"+lname+"','"+password+"');")
 
 
 

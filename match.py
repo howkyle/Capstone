@@ -88,6 +88,9 @@ class Subject():
                                         print choice["subScore"]
                                         print self.potentialStudents
                                         break
+                print "Sorting"
+                self.potentialStudents.sort(key=lambda tup: tup[1]) 
+                print self.potentialStudents
 
 
 
@@ -98,10 +101,14 @@ stud_list = []
 subject_list =[]
 
 capeSubjects= Cape.query.all()
+clist = []
 for subject in capeSubjects:
+        clist.append(subject.subjectName)
         # adds each cape subject from the database to a list
         subject_list.append(Subject(subject.subjectName, subject.capacity,subject.prerequisiteSubject))
 
+print clist
+print "ENDDDDDD OF CLIST"
 students = Student.query.all()
 for student in students:
         # makes a list of student objects to be used for matching 
