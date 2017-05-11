@@ -1,5 +1,5 @@
 from app import db
-import names
+import names,random
 
 db.drop_all()
 db.create_all()
@@ -53,7 +53,7 @@ conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubje
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Entrepreneurship',30,'None');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Environmental Science',30,'None');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Financial Services Studies',30,'None');")
-conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Food And Nutrition',30,'Food and Nutrition');")
+conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Food and Nutrition',30,'Food and Nutrition');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('French',30,'French');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Geography',30,'Geography');")
 conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubject\") values ('Green Engineering',30,'None');")
@@ -74,16 +74,54 @@ conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubje
 
 # dummy data for students
 
-subs = [('Principles of Accounts','Accounting'), ('Agricultural Science','Agricultural Science'), ('Mathematics','Applied Mathematics'), ('Visual Arts','Art And Design'), ('Biology','Biology'), ('Technical Drawing','Building And Mechanical Engineering Drawing'), ('None','Caribbean Studies'), ('Chemistry','Chemistry'), ('None','Communication Studies'), ('Information Technology','Computer Science'), ('None','Digital Media'), ('None','Electrical And Electronic Engineering Technology'), ('Economics','Economics'), ('None','Entrepreneurship'), ('None','Environmental Science'), ('None','Financial Services Studies'), ('None','Food And Nutrition'), ('French','French'), ('Geography','Geography'), ('None','Green Engineering'), ('Caribbean History','History'), ('Information Technology','Information Technology'), ('Mathematics','Integrated Mathematics'), ('Caribbean History','Law', 'Literatures In English'), ('Logistics And Supply Chain Operations'), ('Principles of Business','Management Of Business'), ('Theatre Arts','Performing Arts'), ('Physics','Physics'), ('None','Physical Education And Sport'), ('Mathematics','Pure Mathematics'), ('None','Sociology'), ('Spanish','Spanish'), ('None','Tourism')]
-cape = 
+subs = [('Principles of Accounts','Accounting'), ('Agricultural Science','Agricultural Science'), ('Mathematics','Applied Mathematics'), ('Visual Arts','Art And Design'), ('Biology','Biology'), ('Technical Drawing','Building And Mechanical Engineering Drawing'), ('None','Caribbean Studies'), ('Chemistry','Chemistry'), ('None','Communication Studies'), ('Information Technology','Computer Science'), ('None','Digital Media'), ('None','Electrical And Electronic Engineering Technology'), ('Economics','Economics'), ('None','Entrepreneurship'), ('None','Environmental Science'), ('None','Financial Services Studies'), ('Food and Nutrition','Food and Nutrition'), ('French','French'), ('Geography','Geography'), ('None','Green Engineering'), ('Caribbean History','History'), ('Information Technology','Information Technology'), ('Mathematics','Integrated Mathematics'), ('Caribbean History','Law'),('English Literature', 'Literatures In English'), ('None','Logistics And Supply Chain Operations'), ('Principles of Business','Management Of Business'), ('Theatre Arts','Performing Arts'), ('Physics','Physics'), ('None','Physical Education And Sport'), ('Mathematics','Pure Mathematics'), ('None','Sociology'), ('Spanish','Spanish'), ('None','Tourism')]
+# grades = ["I","II","III","IV","V","VI","U"]
+grades = ["I","II","III","IV"]
 
 
 for i in range(0,50):
-	idnum=62000000
+	pickedCape= []
+	pickedCsec =[]
+	idnum=62000000+i
 	fname = str(names.get_first_name())
-	lname = str(names.get_first_name())
+	lname = str(names.get_last_name())
 	password = "password"
-	conn.execute("insert into student(\"studentID\", \"first_name\",\"last_name\",\"password\")values("+str(idnum+i)+",'"+fname+"','"+lname+"','"+password+"');")
+	conn.execute("insert into student(\"studentID\", \"first_name\",\"last_name\",\"password\")values("+str(idnum)+",'"+fname+"','"+lname+"','"+password+"');")
+	for j in range(0,4):
+		sub = random.choice(subs)
+		if sub[1] in pickedCape:
+			while (sub[1] in pickedCape):
+				sub = random.choice(subs)
+
+		pickedCape.append(sub[1])
+		if sub[0] == "None":
+			pass
+		elif (sub[0] not in pickedCsec):
+			pickedCsec.append(sub[0])
+
+	for j in range(0,4):
+		sub = random.choice(subs)
+		if (sub[0] in pickedCsec or sub[0] == 'None'):
+			while (sub[0] in pickedCsec or sub[0] == 'None'):
+				sub = random.choice(subs)
+
+		pickedCsec.append(sub[0])
+
+	# print "ID"
+	# print idnum
+	# print "Csec"
+	# print pickedCsec
+	# print "Cape"
+	# print pickedCape
+
+	for sub in pickedCsec:
+		grade = random.choice(grades)
+		conn.execute("insert into studied (\"studentID\",\"grade\",\"subjectName\") values('"+str(idnum)+"','"+grade+"','"+sub+"');")
+	
+	priority = 1
+	for sub in pickedCape:
+		conn.execute("insert into application (\"studentID\",\"subjectName\",\"subjectPriority\") values('"+str(idnum)+"','"+sub+"','"+str(priority)+"');")
+		priority+=1
 
 
 

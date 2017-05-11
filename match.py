@@ -84,12 +84,13 @@ class Subject():
                         for choice in stud.choices:
                                 if choice["subname"] == self.name:
                                         self.potentialStudents.append((stud,choice["subScore"]))
-                                        print stud.id
-                                        print choice["subScore"]
-                                        print self.potentialStudents
-                                        break
+                                        # print stud.id
+                                        # print choice["subScore"]
+                                        # print self.potentialStudents
+                                        # break
                 print "Sorting"
                 self.potentialStudents.sort(key=lambda tup: tup[1]) 
+                print self.name
                 print self.potentialStudents
 
 
@@ -107,8 +108,6 @@ for subject in capeSubjects:
         # adds each cape subject from the database to a list
         subject_list.append(Subject(subject.subjectName, subject.capacity,subject.prerequisiteSubject))
 
-print clist
-print "ENDDDDDD OF CLIST"
 students = Student.query.all()
 for student in students:
         # makes a list of student objects to be used for matching 
@@ -118,11 +117,11 @@ for student in students:
 
 
 # TESTING
-for student in stud_list:
-        print student.choices
+# for student in stud_list:
+#         print student.choices
 
 for sub in subject_list:
-        print sub.name
+        # print sub.name
         sub.choosePotentialStudents(stud_list)
 
 
