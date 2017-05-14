@@ -11,7 +11,7 @@ class Applicant():
                 self.subjects =[]
                 self.successCount = 0
                 self.successfulSubs  = []
-                self.choicePriorityDict = {} #dictionary of subject priorities and indexes for easy finding
+                self.choicePriorityDict = {} #dictionary of subject priorities and names for easy finding
 
                 for subject in subjects:
                 	s = {}
@@ -19,7 +19,7 @@ class Applicant():
                 	s["grade"] = subject.grade
                 	self.subjects.append(s)
 
-                choiceCounter = 0
+                
                 for choice in choices:
                 	c = {}
                 	c["priority"] = choice.subjectPriority
@@ -39,8 +39,8 @@ class Applicant():
 
 	                c["subScore"] = c["preReqGrade"]*c["priority"]+(0.5*c["preReqGrade"])
                 	self.choices.append(c)
-                        self.choicePriorityDict[choice.subjectPriority] = choiceCounter
-                        choiceCounter= choiceCounter+1
+                        self.choicePriorityDict[choice.subjectPriority] = choice.subjectName
+        
 
         @property
         def successCount(self):
@@ -83,18 +83,18 @@ class Subject():
                 self.enrolledStudents = [] #list of students enrolled in course.
 
 
-        def enrollMany(self, students): #adds students from already sorted stack until capacity runs out.
-                j = 0
-                x = 0
-                while(self.capacity > 0 and x < len(students) ):
-                        if students[j][0].successCount <3 :
-                                # print "Students who got "+self.name
-                                # print students[j][0].id
-                                self.enrolledStudents.append(students[j][0])
-                                students[j][0].addSuccessfulSubject(self)
-                                self.capacity -= 1
-                        j += 1
-                        x += 1
+        # def enrollMany(self, students): #adds students from already sorted stack until capacity runs out.
+        #         j = 0
+        #         x = 0
+        #         while(self.capacity > 0 and x < len(students) ):
+        #                 if students[j][0].successCount <3 :
+        #                         # print "Students who got "+self.name
+        #                         # print students[j][0].id
+        #                         self.enrolledStudents.append(students[j][0])
+        #                         students[j][0].addSuccessfulSubject(self)
+        #                         self.capacity -= 1
+        #                 j += 1
+        #                 x += 1
 
         def enroll(self, oneStudent):
                 self.enrolledStudents.append(oneStudent)
@@ -115,10 +115,10 @@ class Subject():
                 self.potentialStudents.sort(key=lambda tup: tup[1]) 
                 # enrolls preferred students in the course
 
-                # if self.name == 'Art And Design':
-                #         for stud in self.potentialStudents:
-                #                 print stud[0].id
-                #                 print stud[1]
+                if self.name == 'Information Technology':
+                        for stud in self.potentialStudents:
+                                print stud[0].id
+                                print stud[1]
                
                 selectedCount = 0
                 while len(self.selectedStudents) < self.capacity and selectedCount < len(self.potentialStudents):
@@ -129,13 +129,31 @@ class Subject():
                 # self.enrollMany(self.potentialStudents)
 
         def confirmMatch(self,stud, needed = True):
+                # if selectedStudents == None:
+                #         selectedStudents = self.selectedStudents
+
                 if stud.id in self.selectedStudents:
+
                         if needed:
                                 self.enrolledStudents.append(stud)
                                 stud.addSuccessfulSubject(self)
-                                stud.successCount = stud.successCount+1
+                                self.capacity = self.capacity-1
+                                # if self.name == 'Food and Nutrition':
+                                #         print self.name +" capacity now "+str(self.capacity)
+                                #         print "enrolled "+stud.id
                         else:
-                                self.selectedStudents.remove(stud.id)
+                                print "\nSpace opened in "+ self.name
+                                print stud.id +" doesnt need it"
+                                if len(self.potentialStudents) > len(self.selectedStudents):
+                                        print self.potentialStudents[len(self.selectedStudents)][0].id
+                                        print "given a second chance"
+                                        #add the student next in line to a list to be used in the second round of selection
+                                        self.selectedStudents.remove(stud.id)
+                                        self.selectedStudents.append(self.potentialStudents[len(self.selectedStudents)][0].id)
+                                        self.potentialStudents.remove(self.potentialStudents[len(self.selectedStudents)])
+                                        if self.name == 'Information Technology':
+                                                print self.selectedStudents
+                        
 
 
 
@@ -171,48 +189,66 @@ for student in students:
 # for student in stud_list:
 #         print student.choices
 
-for sub in subject_list:
-        # print sub.name
-        sub.chooseStudents(stud_list) 
-
-for student in stud_list:
-        successful = False
-        for choice in student.choices:
-                if choice["priority"] <4:
-                        subject_list[subjectDict[choice["subname"]]].confirmMatch(student)
-
-        if  student.successCount ==3:
-                successful = True
-                student.successfulApplicant = successful
-
-                #check to see if unneeded subject can be removed to make space for others
-                needed = False
-                student.choices[student.choicePriorityDict[4]].confirmMatch(stud, needed)
 
 
+# MATCHING
+def match():
+        for sub in subject_list:
+                # print sub.name
+                sub.chooseStudents(stud_list) 
+
+        for student in stud_list:
+                successful = False
+                for choice in student.choices:
+                        if choice["priority"] < 4:
+                                subject_list[subjectDict[choice["subname"]]].confirmMatch(student)
+
+                if  student.successCount ==3:
+                        successful = True
+                        student.successfulApplicant = successful
+
+                        #check to see if unneeded subject can be removed to make space for others
+                        needed = False
+                        subject_list[subjectDict[student.choicePriorityDict[4]]].confirmMatch(student, needed)
 
 
-x = 0
-for stud in stud_list:
-        print "\n\n"
-        print stud.id
-        for sub in stud.successfulSubs:
-                print sub.name
+
+
+
+match()
+# print "second round"
+# match()
+# VIEWING RESULTS
+
+
+# x = 0
+# for stud in stud_list:
+#         # print "\n\n"
+#         # print stud.id
+#         # for sub in stud.successfulSubs:
+#         #         print sub.name
         
-        if stud.successCount <3:
-                print x
-                x=x+1
-                print stud.id
-                print "\nApplied for\n"
-                for sub in stud.choices:
-                        print sub['subname']
+#         if stud.successfulApplicant == False:
+#                 print "\n\n"
+#                 print x
+#                 x=x+1
+#                 print stud.id
+#                 print "\nApplied for\n"
+#                 for sub in stud.choices:
+#                         print sub['subname']
 
-                print "\nGOT\n"
-                for sub in stud.successfulSubs:
-                        print sub.name
+#                 print "\nGOT\n"
+#                 for sub in stud.successfulSubs:
+#                         print sub.name
 
-for stud in stud_list:
-        if stud.successCount <3:
-                print stud.id
+# for stud in stud_list:
+#         if stud.successCount <3:
+#                 print stud.id
+
+
+for sub in subject_list:
+        print sub.name
+        print sub.capacity
+        print sub.selectedStudents
 
 
