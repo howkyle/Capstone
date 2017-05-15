@@ -75,8 +75,8 @@ conn.execute("insert into cape (\"subjectName\",\"capacity\",\"prerequisiteSubje
 # dummy data for students
 
 subs = [('Principles of Accounts','Accounting'), ('Agricultural Science','Agricultural Science'), ('Mathematics','Applied Mathematics'), ('Visual Arts','Art And Design'), ('Biology','Biology'), ('Technical Drawing','Building And Mechanical Engineering Drawing'), ('None','Caribbean Studies'), ('Chemistry','Chemistry'), ('None','Communication Studies'), ('Information Technology','Computer Science'), ('None','Digital Media'), ('None','Electrical And Electronic Engineering Technology'), ('Economics','Economics'), ('None','Entrepreneurship'), ('None','Environmental Science'), ('None','Financial Services Studies'), ('Food and Nutrition','Food and Nutrition'), ('French','French'), ('Geography','Geography'), ('None','Green Engineering'), ('Caribbean History','History'), ('Information Technology','Information Technology'), ('Mathematics','Integrated Mathematics'), ('Caribbean History','Law'),('English Literature', 'Literatures In English'), ('None','Logistics And Supply Chain Operations'), ('Principles of Business','Management Of Business'), ('Theatre Arts','Performing Arts'), ('Physics','Physics'), ('None','Physical Education And Sport'), ('Mathematics','Pure Mathematics'), ('None','Sociology'), ('Spanish','Spanish'), ('None','Tourism')]
-# grades = ["I","II","III","IV","V","VI","U"]
-grades = ["I","II"]
+grades = ["I","II","III","IV","V","VI","U"]
+# grades = ["I","II"]
 
 
 for i in range(0,100):

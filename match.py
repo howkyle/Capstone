@@ -61,6 +61,8 @@ class Applicant():
         def addSuccessfulSubject(self,subject):
                 self.successfulSubs.append(subject.name)
                 self.successCount+=1
+                if self.successCount ==3:
+                        self.successfulApplicant = True
                 
 
         def appliedFor(self,subname):
@@ -115,7 +117,7 @@ class Subject():
                 self.potentialStudents.sort(key=lambda tup: tup[1]) 
                 # enrolls preferred students in the course
 
-                if self.name == 'Information Technology':
+                if self.name == 'Agricultural Science':
                         for stud in self.potentialStudents:
                                 print stud[0].id
                                 print stud[1]
@@ -139,23 +141,39 @@ class Subject():
                                         self.enrolledStudents.append(stud.id)
                                         stud.addSuccessfulSubject(self)
                                         self.capacity = self.capacity-1
-                                        # if self.name == 'Food and Nutrition':
-                                        #         print self.name +" capacity now "+str(self.capacity)
-                                        #         print "enrolled "+stud.id
+                                        if self.name == 'Agricultural Science':
+                                                print self.name +" capacity now "+str(self.capacity)
+                                                print "enrolled "+stud.id
                                 else:
                                         print "no more space in "+self.name
                         else:
-                                # print "\nSpace opened in "+ self.name
-                                # print stud.id +" doesnt need it"
+                                if self.name == 'Agricultural Science':
+                                        print "\nSpace opened in "+ self.name
+                                        print stud.id +" doesnt need it"
                                 if len(self.potentialStudents) > len(self.selectedStudents):
-                                        # print self.potentialStudents[len(self.selectedStudents)][0].id
-                                        # print "given a second chance"
+                                        if self.name == 'Agricultural Science':
+                                                print self.potentialStudents[len(self.selectedStudents)][0].id
+                                                print "given a second chance"
                                         #add the student next in line to a list to be used in the second round of selection
                                         self.selectedStudents.remove(stud.id)
                                         self.selectedStudents.append(self.potentialStudents[len(self.selectedStudents)+1][0].id)
                                         self.potentialStudents.remove(self.potentialStudents[len(self.selectedStudents)])
-                                        if self.name == 'Information Technology':
+                                        if self.name == 'Agricultural Science':
                                                 print self.selectedStudents
+
+                        # if stud.id == '62000055':
+                        #         print stud.id
+                        #         print "current subject: "
+                        #         print self.name
+                        #         print "achieved subjects: "
+                        #         print stud.successCount
+                        #         print "successful applicant: "
+                        #         print stud.successfulApplicant
+                        #         print "successful subjects: "
+                        #         print stud.successfulSubs
+                        #         print "needed:"
+                        #         print needed
+                        #         print "---------------------------------------------------"
                         
 
 
@@ -208,13 +226,17 @@ def match(matchingRound = 1):
                                 if choice["priority"] < 4 and choice['subname'] not in student.successfulSubs:
                                         subject_list[subjectDict[choice["subname"]]].confirmMatch(student)
 
-                        if  student.successCount ==3:
+                        if student.successCount<3 and matchingRound!=1:
+                                subject_list[subjectDict[student.choicePriorityDict[4]]].confirmMatch(student)
+                        elif  student.successCount ==3:
                                 successful = True
                                 student.successfulApplicant = successful
 
                                 #check to see if unneeded subject can be removed to make space for others
                                 needed = False
                                 subject_list[subjectDict[student.choicePriorityDict[4]]].confirmMatch(student, needed)
+
+
 
 
 
@@ -233,18 +255,18 @@ for stud in stud_list:
         # for sub in stud.successfulSubs:
         #         print sub.name
         
-        # if stud.successfulApplicant == False:
-        print "\n\n"
-        print x
-        x=x+1
-        print stud.id
-        print "\nApplied for\n"
-        for sub in stud.choices:
-                print sub['subname']
+        if stud.successfulApplicant == False:
+                print "\n\n"
+                print x
+                x=x+1
+                print stud.id
+                print "\nApplied for\n"
+                for sub in stud.choices:
+                        print sub['subname']
 
-        print "\nGOT\n"
-        for sub in stud.successfulSubs:
-                print sub
+                print "\nGOT\n"
+                for sub in stud.successfulSubs:
+                        print sub
 
 for stud in stud_list:
         if stud.successCount <3:
