@@ -23,6 +23,21 @@ app.factory('subjectList', ['$http', function($http){
 				return $http.get('/api/subjects', { 
 					headers : { 'Accept': "csec-list"} //request the list of csec subjects from flask database
 				})
+			},
+			studied:function(data){
+				return $http.get('/api/subjects/'+localStorage.userID,{
+					headers:{'Accept':'csec'}
+				})
+			},
+			applied:function(data){
+				return $http.get('/api/subjects/'+localStorage.userID,{
+					headers:{'Accept':'cape'}
+				})
+			},
+			successfulCape:function(data){
+				return $http.get('/api/subjects/'+localStorage.userID,{
+					headers:{'Accept':'successful-cape'}
+				})
 			}
 	}
 		

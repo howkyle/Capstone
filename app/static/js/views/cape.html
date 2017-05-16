@@ -1,9 +1,18 @@
 <ng-include src="'static/js/views/nav.html'"></ng-include>
 
-<h2>Choose CAPE Subjects In order of importance</h2>
+<div class="col-sm-6">
+	<h4>Applications <span class="badge">priority</span></h4>
+	<ul class = "list-group">
+		<li class="list-group-item" ng-repeat="sub in capeApplied">{{sub.name}} <span class="badge">{{sub.priority}}</span></li>
+	</ul>
+</div>
 
-		<button class="btn-xs" ng-click ="addSubject()">+</button>
-		<div class="csecList" ng-repeat="sub in applied track by $index" ng-init="sub.priority=$index+1">
+<div class="col-sm-6">
+	<h4>Choose 4 CAPE Subjects <small>in order of priority</small></h4>
+
+		<button class="btn-xs" ng-click ="addSubject()" ng-disabled="disableAdd">+</button>
+		<div class="csecList" ng-repeat="sub in applied track by $index" ng-init="sub.priority=$index+1+capeApplied.length">
 			<select ng-model ="sub.subject" ng-options="subject.name for subject in subjects"></select>
 		</div>
-		<button ng-click="submitSubs()">Submit Subjects</button>
+		<button ng-show="allowSubmit" ng-click="submitSubs()">Submit</button>
+</div>

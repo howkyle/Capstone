@@ -1,17 +1,25 @@
 <ng-include src="'static/js/views/nav.html'"></ng-include>
-<div class="CsecSubjects" ng-controller="CsecCtrl">
-		<h2>Add Csec Subjects</h2>
-		<button class="btn-xs" ng-click ="addSubject()">+</button>
-		<div class="csecList" ng-repeat="sub in studied track by $index">
-			<div class="form-group">
-				<label>Subject:</label>
-				<select ng-model ="sub.subjectName" ng-options="subject for subject in subjects"></select>
-				<label>Grade:</label>
-				<select ng-model ="sub.grade" ng-options="grade for grade in grades"></select>
-			</div>
-			
-		</div>
-		<button ng-show="allowSubmit" class="btn" ng-click="submitSubs()">Submit</button>
 
-		
+
+<div class = "col-sm-6">
+	<h4>Subjects Studied <span class="badge">grade</span></h4>
+	<ul class="list-group " >
+		<li class="list-group-item" ng-repeat="sub in csecSubmitted">{{sub.name}}<span class="badge">{{sub.grade}}</span></li>
+	</ul>
+</div>
+
+<div class = "col-sm-6" >
+	<h4>Add Csec Subjects</h4>
+	<button class="btn-xs" ng-click ="addSubject()">+</button>
+	<div class="csecList" ng-repeat="sub in studied track by $index">
+	<div class="form-group">
+		<label>Subject:</label>
+		<select ng-model ="sub.subjectName" ng-options="subject for subject in subjects"></select>
+		<label>Grade:</label>
+		<select ng-model ="sub.grade" ng-options="grade for grade in grades"></select>
 	</div>
+	
+	</div>
+	<button ng-show="allowSubmit" class="btn" ng-click="submitSubs()">Submit</button>
+</div>
+	

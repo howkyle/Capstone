@@ -227,6 +227,8 @@ def match(matchingRound = 1):
                                         subject_list[subjectDict[choice["subname"]]].confirmMatch(student)
 
                         if student.successCount<3 and matchingRound!=1:
+                                print "worked once"
+                                print student.id
                                 subject_list[subjectDict[student.choicePriorityDict[4]]].confirmMatch(student)
                         elif  student.successCount ==3:
                                 successful = True
@@ -255,28 +257,35 @@ for stud in stud_list:
         # for sub in stud.successfulSubs:
         #         print sub.name
         
-        if stud.successfulApplicant == False:
-                print "\n\n"
-                print x
-                x=x+1
-                print stud.id
-                print "\nApplied for\n"
-                for sub in stud.choices:
-                        print sub['subname']
+        # if stud.successfulApplicant == False:
+        #         print "\n\n"
+        #         print x
+        #         x=x+1
+        #         print stud.id
+        #         print "\nApplied for\n"
+        #         for sub in stud.choices:
+        #                 print sub['subname']
 
-                print "\nGOT\n"
-                for sub in stud.successfulSubs:
-                        print sub
+        #         print "\nGOT\n"
+        #         for sub in stud.successfulSubs:
+        #                 print sub
+        for sub in stud.successfulSubs:
+                success = SuccessfulApplication(studentID = stud.id,subjectName= sub)
+                db.session.add(success)
+        
+        db.session.commit()
 
-for stud in stud_list:
-        if stud.successCount <3:
-                print stud.id
 
 
-for sub in subject_list:
-        print "\n"
-        print sub.name
-        print sub.capacity
-        print sub.enrolledStudents
+# for stud in stud_list:
+#         if stud.successCount <3:
+#                 print stud.id
+
+
+# for sub in subject_list:
+#         print "\n"
+#         print sub.name
+#         print sub.capacity
+#         print sub.enrolledStudents
 
 

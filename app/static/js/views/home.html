@@ -1,24 +1,22 @@
 
 	<ng-include src="'static/js/views/nav.html'"></ng-include>
 
-<div class="container">
-	Lorem ipsum dolor sit amet, eum aperiam percipit abhorreant ei. Tation patrioque expetendis mea no, mei tempor tritani ad. Discere adipisci pri an. Ex qui persecuti deterruisset, id sea eruditi alienum sensibus, sit te fabulas corrumpit reprehendunt. An vim unum debitis dolorem.
-
-No pro facer fierent, nostrum splendide pro ea. Probo etiam vim an, ut mel iuvaret tractatos petentium. Mei choro iriure ex, in vix sale debet dignissim. Et percipit verterem cum. Sea id splendide interesset.
-
-Te eos causae percipit, rebum mediocrem ea vis, vis perpetua convenire urbanitas ne. Est at latine aliquando. Mei an menandri persecuti, te equidem voluptua evertitur vel. Sed solum justo illum te. Usu et pericula omittantur. Ea omnes graeco delicata cum, qui id dicant civibus.
-
-Eros incorrupte cum eu, no quo viris facete, ne pri graecis sapientem. Mei ei dicunt eleifend, purto ferri nam id. Ea qui erat probo. Vel ad vivendo quaerendum, aperiam deserunt periculis id pro. Facilis platonem maluisset ius ut, suas ponderum ad nec, eam et exerci neglegentur.
-
-Mucius salutatus pri ne, per affert lobortis id, eam te idque saperet. At his tempor meliore mediocritatem, quot natum magna an sed. Ea duo perfecto pertinacia, et duo decore prompta neglegentur. Eu sed amet hinc explicari. Ius quando tibique te, eu pro causae aperiam.
-
-An verterem deseruisse cum, at nulla primis ius, sed zril dolorem an. Accusam petentium laboramus cu eam. Id sit mazim nusquam efficiendi, id usu ferri inermis torquatos, justo nullam minimum mei ne. An esse partiendo pri. Noster docendi et sit, ad quo erat petentium, soluta delenit et mel.
-
-Ius qualisque prodesset eloquentiam eu, te putent platonem torquatos per. Ne sit regione commune convenire, reque iisque moderatius eam at. Clita dolorem facilisis et eum. Sit in atqui elitr, mucius docendi eum ad, ius probo equidem partiendo te. Tation iriure per eu, vix feugiat facilisis ad.
-
-Eam novum consulatu eu, cum exerci timeam ancillae cu, hinc errem minimum at ius. Et quo noster nostrud percipitur, vel aeterno mandamus et. Vel putent recusabo ei. Vis audire commodo id.
-
-Suas dolorem eos id, et vero doctus fabellas nam. No vis natum vivendo eloquentiam, ei eam partem officiis recteque, vel id esse vivendo. Usu te quas verear incorrupte. Idque perpetua sententiae vis ex.
-
-His eros dolore ex, alia legimus atomorum vis cu, quo pericula similique an. Errem qualisque has id, mel ex tation libris commune, eos cu nusquam accusata. Eum vero vulputate ne, eos ei quodsi aeterno scripserit. An pro novum percipit percipitur, tibique officiis no nam, agam soleat intellegat ea est. Prodesset interpretaris usu ne, an sanctus quaestio vim, te duis oblique cum.
+<div class="col-sm-4">
+	<h4>Subjects Studied <span class="badge">grade</span></h4>
+		<ul class = "list-group">
+			<li class="list-group-item" ng-repeat="sub in csecSubmitted">{{sub.name}}<span class="badge">{{sub.grade}}</span></li>
+		</ul>
+</div>
+<div class="col-sm-4">
+	<h4>Applications <span class="badge">priority</span></h4>
+	<ul class = "list-group">
+		<li class="list-group-item" ng-repeat="sub in capeApplied">{{sub.name}} <span class="badge">{{sub.priority}}</span></li>
+	</ul>
+</div>
+<div class="col-sm-4">
+	<h4>Subjects Attained</h4>
+	<ul class = "list-group">
+			<li class="list-group-item" ng-repeat="sub in successfulCape">{{sub.name}}</li>
+			<li class="list-group-item" ng-show="showMessage">{{message}}</li>
+		</ul>
 </div>

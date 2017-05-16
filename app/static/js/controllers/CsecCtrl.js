@@ -9,6 +9,11 @@ app.controller('CsecCtrl',['$scope','subjectList','$http','$location', function(
 		$scope.subjects = response.data
 	});
 
+	subjectList.studied().then(function(response){
+		$scope.csecSubmitted = response.data.data
+		console.log(response.data)
+	})
+
 	$scope.grades = ["I","II","III","IV","V","VI","U"]
 
 	$scope.studied=[]

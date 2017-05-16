@@ -8,6 +8,7 @@ class Student(db.Model):
 	password = db.Column(db.String(50))
 	csec_subjects = db.relationship("Studied", backref='student', cascade="all, delete-orphan" , lazy='dynamic')
 	chosen_subjects = db.relationship("Application",backref='student', cascade="all, delete-orphan" , lazy='dynamic')
+	assigned_subjects = db.relationship("SuccessfulApplication",backref='student', cascade="all, delete-orphan" , lazy='dynamic')
 	authenticated = db.Column(db.Boolean, default = True)
 
 	def is_authenticated(self):
@@ -60,6 +61,7 @@ class Cape(db.Model):
 	capacity = db.Column(db.Integer())
 	prerequisiteSubject = db.Column(db.String(80), db.ForeignKey('csec.subjectName'))
 	application = db.relationship("Application")
+	successful_application = db.relationship("SuccessfulApplication")
 
 
 class Application(db.Model):
@@ -67,5 +69,11 @@ class Application(db.Model):
 	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
 	subjectName= db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
 	subjectPriority = db.Column(db.Integer())
+
+class SuccessfulApplication(db.Model):
+	id = db.Column(db.Integer(), primary_key = True)
+	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
+	subjectName= db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
+	
 
 

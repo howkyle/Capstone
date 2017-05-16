@@ -141,6 +141,47 @@ def getSubjects():
 
 			return jsonify(sub_list)
 
+@app.route('/api/subjects/<studid>', methods = ["GET"])
+def getStudentSubjects(studid):
+	if request.method =="GET":
+		response = { "status": 'null', "data":'null', "message": ''}
+		sub_list =[]
+		if request.headers['Accept'] == 'cape':
+			subjects = Application.query.filter_by(studentID = studid)
+			if subjects:
+				
+				for subject in subjects:
+					sub = {}
+					sub["name"] = str(subject.subjectName)
+					sub["priority"] = subject.subjectPriority
+					sub_list.append(sub)
+				# response["status"] = 'success'
+				# response["data"] = sub_list
+				# response["message"]= "subjects successfully retrieved"
+		if request.headers['Accept'] =='csec':
+			subjects = Studied.query.filter_by(studentID = studid)
+			if subjects:
+				for subject in subjects:
+					sub = {}
+					sub["name"] = subject.subjectName
+					sub["grade"] = subject.grade
+					sub_list.append(sub)
+
+		if request.headers['Accept'] == 'successful-cape':
+			subjects = SuccessfulApplication.query.filter_by(studentID = studid)
+			if subjects:
+				
+				for subject in subjects:
+					sub = {}
+					sub["name"] = str(subject.subjectName)
+					sub_list.append(sub)
+				
+		response["status"] = 'success'
+		response["data"] = sub_list
+		response["message"]= "subjects successfully retrieved"		
+		return jsonify(response)
+
+
 @login_manager.user_loader
 def load_user(id):
     return Student.query.get(str(id))
