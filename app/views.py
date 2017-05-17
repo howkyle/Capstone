@@ -3,6 +3,7 @@ from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from models import *
+import match
 import json
 
 @app.route('/')
@@ -87,6 +88,7 @@ def config():
 			db.session.commit()
 			c["mandatory"] = conf.mandatorySubject
 			c["classSize"] = conf.classSize
+			c["matched"] = conf.matchPerformed
 
 	if request.method == "GET":
 		result = Config.query.filter_by(id = 1)
@@ -97,9 +99,11 @@ def config():
 			except:
 				c["mandatory"] = ""
 				c["classSize"] = 0
+				c["matched"] = False
 			else:
 				c["mandatory"] = conf.mandatorySubject
 				c["classSize"] = conf.classSize
+				c["matched"] = conf.matchPerformed
 
 	return jsonify(c)
 
@@ -250,6 +254,20 @@ def getStudentSubjects(studid):
 		response["message"]= "subjects successfully retrieved"		
 		return jsonify(response)
 
+@app.route('/api/match', methods = ["GET"])
+def performMatching():
+	print "MATCHING TIME"
+	if request.method == "GET":
+		response = { "status": 'null', "data":'null', "message": ''}
+		# try:
+		match.matchStudents()
+		# except:
+		# 	response["status"]="error"
+		# 	response["message"]="could not match"
+		# else:
+		response["status"]="success"
+		response["message"]="successfully matched"
+		return jsonify(response)
 
 @login_manager.user_loader
 def load_user(id):

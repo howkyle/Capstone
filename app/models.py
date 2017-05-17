@@ -79,6 +79,7 @@ class Config(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
 	mandatorySubject = db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
 	classSize = db.Column(db.Integer())
+	matchPerformed = db.Column(db.Boolean, default = False)
 	
 
 

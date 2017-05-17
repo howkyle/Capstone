@@ -5,7 +5,7 @@
 	<div class="config" ng-show="displayConfig">
 		<h4>Config <small>update config details</small></h4>
 		<label for="mandatorySubject" class="control-label">Mandatory Subject:({{mandatorySubject}})</label>
-		<select id="mandatorySubject" ng-model ="mandatorySubject" ng-options="subject.name for subject in capeList"></select>
+		<select id="mandatorySubject" ng-model ="mandatorySub" ng-options="subject.name for subject in capeList"></select>
 		<label for="classSize" class="control-label">Class Size:</label>
 		<input type="number" name="classSize" ng-model="classSize" id="classSize">
 		<button class="btn" ng-click="saveConfig()">Save</button>
@@ -13,7 +13,7 @@
 
 	<div class="operations">
 	<h4>Operations</h4>
-		<button ng-click="match" >Perform Matching</button>
+		<button ng-disabled="matched" ng-click="match()" >Perform Matching</button> <small ng-show="matched">Students already matched and enrolled</small>
 	</div>
 	
 

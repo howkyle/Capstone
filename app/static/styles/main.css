@@ -1,12 +1,15 @@
 body{
 	height: 100%;
+	width:100%;
 	
 }
 html{
 	height: 100%;
 }
 main{
+	height: 87%;
 	min-height: 87%;
+	width: 100%;
 }
 header{
 	height: 10%;
@@ -24,6 +27,12 @@ button{
 
 }
 
+.btn-block{
+	background-color: white;
+	color: #137587;
+	border-color: #137587;
+	opacity: 0.7;
+}
 .userDetails{
 	/*padding-top: 5px;*/
 	display: inline;
@@ -38,4 +47,28 @@ button{
 }
 .header_logo{
 	height: 100%;
+}
+.landing{
+	background-image:url('/static/images/background.jpg');
+	opacity: 0.9;
+	min-height: 100%;
+	width: 100%;
+}
+
+.landingTitle{
+	font-weight: bold;
+	color: white;
+	border-color: #137587;
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+.registration{
+	padding-top: 50px;
+}
+.login{
+	padding-top: 50px;
+}
+.app{
+	height: 100%;
+	min-height: 100%;
 }

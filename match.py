@@ -255,7 +255,7 @@ def match(matchingRound = 1):
 
 
 
-
+def matchStudents():
 match()
 print "second round"
 match(2)
@@ -281,7 +281,7 @@ for stud in stud_list:
                 print "\nGOT\n"
                 for sub in stud.successfulSubs:
                         print sub
-        
+
         for sub in stud.successfulSubs:
                 success = SuccessfulApplication(studentID = stud.id,subjectName= sub)
                 db.session.add(success)

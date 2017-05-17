@@ -21,8 +21,8 @@ Final Year Project
 <!-- show subjects already done on csec --> Done
 <!-- show subjects already applied for on cape -->Done
 <!-- limit application to 4 subjects --> Done
-<!-- make pretty -->
-<!-- add colour bar to get rid of excess white -->
+<!-- make pretty --> Done
+<!-- add colour bar to get rid of excess white --> Done
 <!-- implement scheduling -->
 
 
