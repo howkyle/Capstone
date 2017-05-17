@@ -34,6 +34,75 @@ def signUp():
 
 	return render_template("signup.html", form = form)
 
+@app.route('/api/admin/login', methods = ["POST"])
+def adminLogin():
+	if request.method == "POST":
+		print "Admin login"
+		response = { "status": 'null', "data":'null', "message": 'null'}
+		data = json.loads(request.data)
+		if data["password"] == "admin" and data["id"] == "admin":
+			response["status"]="success"
+			response["message"]="successful login"
+			response["data"] = {'id':"admin" ,'fname':"admin",'lname':"admin"}
+		else:
+			response["status"]="error"
+			response["message"]="incorrect credentials"
+
+		return jsonify(response)
+
+
+@app.route('/api/admin/students', methods =["GET"])
+def getStudents():
+	if request.method == "GET":
+		result = Student.query.all()
+		student_list = []
+		for student in result:
+			subject_list =[]
+			subjects= student.assigned_subjects
+			for sub in subjects:
+				subject_list.append(sub.subjectName)
+			stud = student.json
+			stud["subjects"] = subject_list
+			student_list.append(stud)
+
+	return jsonify(student_list)
+
+@app.route('/api/config',methods = ["GET","POST"])
+def config():
+	c = {}
+	if request.method=="POST":
+		data  = json.loads(request.data)
+		result = Config.query.filter_by(id = 1)
+		if result:
+			try:
+				conf  = result[0]
+				print "got config from table"
+			except:
+				conf = Config(mandatorySubject = data["mandatory"], classSize =data["classSize"])
+				db.session.add(conf)
+			else:
+				conf.mandatorySubject = data["mandatory"]
+				conf.classSize = data["classSize"]
+
+			db.session.commit()
+			c["mandatory"] = conf.mandatorySubject
+			c["classSize"] = conf.classSize
+
+	if request.method == "GET":
+		result = Config.query.filter_by(id = 1)
+		if result:
+			try:
+				conf  = result[0]
+				print "got config from table"
+			except:
+				c["mandatory"] = ""
+				c["classSize"] = 0
+			else:
+				c["mandatory"] = conf.mandatorySubject
+				c["classSize"] = conf.classSize
+
+	return jsonify(c)
+
 @app.route('/api/login', methods=["POST"])
 def login():
 	if request.method== "POST":

@@ -10,5 +10,10 @@
 		<label for="password" class="control-label col-sm-2">Password:</label>
 		<input type="password"  id="password" name="Password" ng-model="password">
 	</div>
-	<button class="btn col-sm-offset-3" ng-click="login()" > Log in</button>
+	<div class="form-group">
+		<label for="admin" class="control-label col-sm-2">Admin</label>
+		<input type="checkbox"  id="admin" name="Admin" ng-model="adminCheck">
+	</div>
+
+	<button class="btn col-sm-offset-3" ng-click="login()" >Log in</button>
 </form>

@@ -3,6 +3,11 @@ app.controller('CsecCtrl',['$scope','subjectList','$http','$location', function(
 	if(localStorage.userID == null){
 		$location.url("/")
 	}
+	else{
+		if(localStorage.userID == 'admin'){
+			$location.url('/admin')
+		}
+	}
 
 	subjectList.csecList().then(function(response){
 		// console.log(data);

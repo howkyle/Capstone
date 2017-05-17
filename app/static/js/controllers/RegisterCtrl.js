@@ -1,7 +1,11 @@
 app.controller('RegisterCtrl', ['$scope','$location','$http', function($scope,$location,$http){
 	if(localStorage.userID != null){
-		// $scope.showNav = true
+		if(localStorage.userID == 'admin'){
+			$location.url('/admin')
+		}else{
+			// $scope.showNav = true
 		$location.url("/home")
+		}
 	}
 	// $scope.showNav = false
 

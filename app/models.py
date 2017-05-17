@@ -62,7 +62,7 @@ class Cape(db.Model):
 	prerequisiteSubject = db.Column(db.String(80), db.ForeignKey('csec.subjectName'))
 	application = db.relationship("Application")
 	successful_application = db.relationship("SuccessfulApplication")
-
+	mandatorySubject = db.relationship("Config")
 
 class Application(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
@@ -74,6 +74,11 @@ class SuccessfulApplication(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
 	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
 	subjectName= db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
+
+class Config(db.Model):
+	id = db.Column(db.Integer(), primary_key = True)
+	mandatorySubject = db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
+	classSize = db.Column(db.Integer())
 	
 
 

@@ -1,0 +1,46 @@
+<div class="container">
+	<h6><a href="/#/logout">Logout</a></h6>
+	<button class="btn-xs" ng-click="showConfig()">Config</button>
+
+	<div class="config" ng-show="displayConfig">
+		<h4>Config <small>update config details</small></h4>
+		<label for="mandatorySubject" class="control-label">Mandatory Subject:({{mandatorySubject}})</label>
+		<select id="mandatorySubject" ng-model ="mandatorySubject" ng-options="subject.name for subject in capeList"></select>
+		<label for="classSize" class="control-label">Class Size:</label>
+		<input type="number" name="classSize" ng-model="classSize" id="classSize">
+		<button class="btn" ng-click="saveConfig()">Save</button>
+	</div>
+
+	<div class="operations">
+	<h4>Operations</h4>
+		<button ng-click="match" >Perform Matching</button>
+	</div>
+	
+
+
+	<div class ="col-sm-4">
+		Students
+		<ul class="list-group ">
+			<li class="list-group-item" ng-repeat="stud in students">{{stud.fname}} {{stud.lname}}<span class="badge">{{stud.id}} </span></li>
+		</ul>
+	</div>
+	
+
+	
+
+	<div class ="col-sm-4">
+		Successful Students
+		<ul class="list-group ">
+			<li class="list-group-item" ng-repeat="stud in acceptedStudents">{{stud.fname}} {{stud.lname}}<span class="badge">{{stud.id}} </span></li>
+		</ul>
+	</div>
+	
+	<div class ="col-sm-4">
+		Unsuccessful Students
+	<ul class="list-group ">
+		<li class="list-group-item" ng-repeat="stud in rejectedStudents">{{stud.fname}} {{stud.lname}}<span class="badge">{{stud.id}} </span></li>
+	</ul>
+	</div>
+	
+
+</div>	

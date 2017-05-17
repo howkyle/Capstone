@@ -1,12 +1,37 @@
 app.controller('CapeCtrl', ['$scope', 'subjectList','$http','$location',function($scope,subjectList,$http,$location){
-	subjectList.capeList().then(function (response) {
+	
+	if(localStorage.userID == null){
+		$location.url("/")
+	}
+	else{
+		if(localStorage.userID == 'admin'){
+			$location.url('/admin')
+		}
+	}
+	
+	subjectList.capeList().then(function(response) {
 		$scope.subjects = response.data
-		console.log($scope.subjects)
+		
 	})
+
+	$http.get('/api/config').then(function(response){
+		if (response.data){
+			$scope.mandatorySubject = response.data.mandatory
+			$scope.classSize = response.data.classSize
+			for (i =0;i<$scope.subjects.length;i++){
+				if($scope.subjects[i].name == $scope.mandatorySubject){
+					$scope.subjects.splice(i,1)
+					break
+				}
+			}
+		}
+	})
+
+	
 
 	subjectList.applied().then(function(response){
 		$scope.capeApplied = response.data.data
-		console.log(response.data)
+		// console.log(response.data)
 		if (($scope.capeApplied.length) <=4){
 		$scope.disableAdd = false
 		}else{
@@ -21,14 +46,14 @@ app.controller('CapeCtrl', ['$scope', 'subjectList','$http','$location',function
 	$scope.addSubject = function(){
 
 		$scope.applied.push({})
-		if($scope.applied.length ==0){
+		if($scope.applied.length==0){
 			$scope.allowSubmit = false
 		}
 		else{
 			$scope.allowSubmit = true
 		}
-		console.log($scope.applied)
-		console.log($scope.applied.length + $scope.capeApplied.length)
+		// console.log($scope.applied)
+		// console.log($scope.applied.length + $scope.capeApplied.length)
 		if (($scope.applied.length + $scope.capeApplied.length) >=4){
 			$scope.disableAdd = true
 

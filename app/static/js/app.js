@@ -30,6 +30,10 @@ app.config(['$routeProvider',function($routeProvider) {
 		template: "",
 		controller: "LogoutCtrl"
 	})
+	.when('/admin',{
+		templateUrl:"static/js/views/admin.html",
+		controller: "adminCtrl"
+	})
 	.otherwise({
 		redirectTo:'/'
 	})

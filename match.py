@@ -2,6 +2,9 @@ from app import db
 from app.models import *
 import json
 
+CAPACITY = 30
+MANDATORY = ""
+
 
 class Applicant():
         def __init__(self, student_id, subjects, choices):
@@ -117,10 +120,10 @@ class Subject():
                 self.potentialStudents.sort(key=lambda tup: tup[1]) 
                 # enrolls preferred students in the course
 
-                if self.name == 'Agricultural Science':
-                        for stud in self.potentialStudents:
-                                print stud[0].id
-                                print stud[1]
+                # if self.name == 'Agricultural Science':
+                #         for stud in self.potentialStudents:
+                #                 print stud[0].id
+                #                 print stud[1]
                
                 selectedCount = 0
                 while len(self.selectedStudents) < self.capacity and selectedCount < len(self.potentialStudents):
@@ -141,25 +144,25 @@ class Subject():
                                         self.enrolledStudents.append(stud.id)
                                         stud.addSuccessfulSubject(self)
                                         self.capacity = self.capacity-1
-                                        if self.name == 'Agricultural Science':
-                                                print self.name +" capacity now "+str(self.capacity)
-                                                print "enrolled "+stud.id
+                                        # if self.name == 'Agricultural Science':
+                                        #         print self.name +" capacity now "+str(self.capacity)
+                                        #         print "enrolled "+stud.id
                                 else:
                                         print "no more space in "+self.name
                         else:
-                                if self.name == 'Agricultural Science':
-                                        print "\nSpace opened in "+ self.name
-                                        print stud.id +" doesnt need it"
+                                # if self.name == 'Agricultural Science':
+                                #         print "\nSpace opened in "+ self.name
+                                #         print stud.id +" doesnt need it"
                                 if len(self.potentialStudents) > len(self.selectedStudents):
-                                        if self.name == 'Agricultural Science':
-                                                print self.potentialStudents[len(self.selectedStudents)][0].id
-                                                print "given a second chance"
+                                        # if self.name == 'Agricultural Science':
+                                        #         print self.potentialStudents[len(self.selectedStudents)][0].id
+                                        #         print "given a second chance"
                                         #add the student next in line to a list to be used in the second round of selection
                                         self.selectedStudents.remove(stud.id)
                                         self.selectedStudents.append(self.potentialStudents[len(self.selectedStudents)+1][0].id)
                                         self.potentialStudents.remove(self.potentialStudents[len(self.selectedStudents)])
-                                        if self.name == 'Agricultural Science':
-                                                print self.selectedStudents
+                                        # if self.name == 'Agricultural Science':
+                                        #         print self.selectedStudents
 
                         # if stud.id == '62000055':
                         #         print stud.id
@@ -194,7 +197,7 @@ subCounter = 0
 for subject in capeSubjects:
         clist.append(subject.subjectName)
         # adds each cape subject from the database to a list
-        subject_list.append(Subject(subject.subjectName, subject.capacity,subject.prerequisiteSubject))
+        subject_list.append(Subject(subject.subjectName, CAPACITY,subject.prerequisiteSubject))
         subjectDict[subject.subjectName] = subCounter
         subCounter = subCounter+1
 
@@ -205,6 +208,15 @@ for student in students:
 	choices = Application.query.filter_by(studentID = student.studentID)
         stud_list.append(Applicant(student.studentID, subjects,choices))
 
+
+config = Config.query.filter_by(id = 1)
+try:
+        conf = config[0]
+except:
+        print "Didnt set config value"
+else:
+        CAPACITY = conf.classSize
+        MANDATORY = conf.mandatorySubject
 
 # TESTING
 # for student in stud_list:
@@ -257,22 +269,25 @@ for stud in stud_list:
         # for sub in stud.successfulSubs:
         #         print sub.name
         
-        # if stud.successfulApplicant == False:
-        #         print "\n\n"
-        #         print x
-        #         x=x+1
-        #         print stud.id
-        #         print "\nApplied for\n"
-        #         for sub in stud.choices:
-        #                 print sub['subname']
+        if stud.successfulApplicant == False:
+                print "\n\n"
+                print x
+                x=x+1
+                print stud.id
+                print "\nApplied for\n"
+                for sub in stud.choices:
+                        print sub['subname']
 
-        #         print "\nGOT\n"
-        #         for sub in stud.successfulSubs:
-        #                 print sub
+                print "\nGOT\n"
+                for sub in stud.successfulSubs:
+                        print sub
+        
         for sub in stud.successfulSubs:
                 success = SuccessfulApplication(studentID = stud.id,subjectName= sub)
                 db.session.add(success)
         
+        mandatory = SuccessfulApplication(studentID = stud.id,subjectName= MANDATORY)
+        db.session.add(mandatory)
         db.session.commit()
 
 
