@@ -21,7 +21,7 @@ app.controller('HomeCtrl', ['$scope','$http','$location','subjectList', function
 			$scope.message = "Find out next time on dragon ball z"
 			$scope.showMessage = true
 		}
-		else if($scope.successfulCape.length<3){
+		else if($scope.successfulCape.length<4){
 			$scope.message = "No place available for you"
 			$scope.showMessage = true
 		}

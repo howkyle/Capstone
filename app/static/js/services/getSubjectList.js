@@ -38,7 +38,11 @@ app.factory('subjectList', ['$http', function($http){
 				return $http.get('/api/subjects/'+localStorage.userID,{
 					headers:{'Accept':'successful-cape'}
 				})
+			},
+			timeTable:function(data){
+				return $http.get('/api/timetable/'+localStorage.userID)
 			}
+
 	}
 		
 }])

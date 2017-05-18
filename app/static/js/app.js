@@ -34,6 +34,10 @@ app.config(['$routeProvider',function($routeProvider) {
 		templateUrl:"static/js/views/admin.html",
 		controller: "adminCtrl"
 	})
+	.when('/timetable',{
+		templateUrl:"static/js/views/timetable.html",
+		controller: "timetableCtrl"
+	})
 	.otherwise({
 		redirectTo:'/'
 	})

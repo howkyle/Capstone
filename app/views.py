@@ -68,6 +68,25 @@ def getStudents():
 
 	return jsonify(student_list)
 
+@app.route('/api/timetable/<stuid>', methods = ["GET"])
+def getTimeTable(stuid):
+	if request.method == "GET":
+		subject_list=[]
+		subjects = SuccessfulApplication.query.filter_by(studentID = stuid)
+		for subject in subjects:
+			sub = {}
+			times = TimeTable.query.filter_by(subjectName = subject.subjectName)
+			subTimes =[]
+			for time in times:
+				subTimes.append(time.time)
+			sub["name"] = subject.subjectName
+			sub["times"] = subTimes
+			subject_list.append(sub)
+		return jsonify(subject_list)
+		
+
+
+
 @app.route('/api/config',methods = ["GET","POST"])
 def config():
 	c = {}

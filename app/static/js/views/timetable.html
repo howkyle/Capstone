@@ -1,0 +1,9 @@
+<ng-include src="'static/js/views/nav.html'"></ng-include>
+
+<div class="col-sm-3" ng-repeat="sub in subjects">
+	<ul class = "list-group" >
+	{{sub.name}}
+	<li class="list-group-item" ng-repeat="time in sub.times">{{time}}</li>
+	
+	</ul>
+</div>

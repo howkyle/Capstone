@@ -308,7 +308,7 @@ def matchStudents():
         match()
         print "second round"
         match(2)
-        # commit()
+        commit()
         for sub in subject_list:
                 print "\n"
                 print sub.name
@@ -316,7 +316,17 @@ def matchStudents():
                 print sub.enrolledStudents
 
         initialize(subject_list)
-        a = Schedule().matchtime()
-        print a
+        timeTable = Schedule().matchtime()
+        print "\n\n\n\n\n\n"
+        # print a
+        for sub in subject_list:
+                if (sub.name in timeTable):
+                        times = timeTable[sub.name]
+                        for time in times:
+                                if time == None:
+                                        time = 'TBA'
+                                slot = TimeTable(subjectName = sub.name, time= time)
+                                db.session.add(slot)
+                        db.session.commit()
 
 

@@ -63,6 +63,7 @@ class Cape(db.Model):
 	application = db.relationship("Application")
 	successful_application = db.relationship("SuccessfulApplication")
 	mandatorySubject = db.relationship("Config")
+	schedule = db.relationship("TimeTable")
 
 class Application(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
@@ -74,6 +75,11 @@ class SuccessfulApplication(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
 	studentID= db.Column(db.String(50), db.ForeignKey('student.studentID'))
 	subjectName= db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
+
+class TimeTable(db.Model):
+	id = db.Column(db.Integer(), primary_key = True)
+	subjectName = db.Column(db.String(80),db.ForeignKey('cape.subjectName'))
+	time =  db.Column(db.String(50))
 
 class Config(db.Model):
 	id = db.Column(db.Integer(), primary_key = True)
