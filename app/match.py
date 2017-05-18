@@ -1,6 +1,7 @@
 from app import db
 from app.models import *
 import json
+from schedule import *
 
 class Applicant():
         def __init__(self, student_id, subjects, choices):
@@ -188,6 +189,17 @@ subjectDict = {} #stores subject names and their position in the list
 def setup():
         global CAPACITY
         global MANDATORY
+
+        config = Config.query.filter_by(id = 1)
+        try:
+                conf = config[0]
+        except:
+                print "Didnt set config value"
+        else:
+                CAPACITY = conf.classSize
+                MANDATORY = conf.mandatorySubject
+
+
         capeSubjects= Cape.query.all()
         clist = []
 
@@ -195,6 +207,8 @@ def setup():
         for subject in capeSubjects:
                 clist.append(subject.subjectName)
                 # adds each cape subject from the database to a list
+                print "Subject Capacity"
+                print CAPACITY
                 subject_list.append(Subject(subject.subjectName, CAPACITY,subject.prerequisiteSubject))
                 subjectDict[subject.subjectName] = subCounter
                 subCounter = subCounter+1
@@ -207,14 +221,7 @@ def setup():
                 stud_list.append(Applicant(student.studentID, subjects,choices))
 
 
-        config = Config.query.filter_by(id = 1)
-        try:
-                conf = config[0]
-        except:
-                print "Didnt set config value"
-        else:
-                CAPACITY = conf.classSize
-                MANDATORY = conf.mandatorySubject
+        
 
 # TESTING
 # for student in stud_list:
@@ -253,7 +260,7 @@ def match(matchingRound = 1):
 
 
 
-def view():
+def commit():
         x = 0
         for stud in stud_list:
                 if stud.successfulApplicant == False:
@@ -264,6 +271,7 @@ def view():
                 
                 mandatory = SuccessfulApplication(studentID = stud.id,subjectName= MANDATORY)
                 db.session.add(mandatory)
+                db.session.commit()
                 
         result = Config.query.filter_by(id = 1)
         if result:
@@ -275,6 +283,12 @@ def view():
                 else:
                         conf.matchPerformed = True
         db.session.commit()
+
+        for sub in subject_list:
+                print "\n"
+                print sub.name
+                print sub.capacity
+                print sub.enrolledStudents
 
 
 
@@ -294,7 +308,15 @@ def matchStudents():
         match()
         print "second round"
         match(2)
-        # VIEWING RESULTS
-        view()
+        # commit()
+        for sub in subject_list:
+                print "\n"
+                print sub.name
+                print sub.capacity
+                print sub.enrolledStudents
+
+        initialize(subject_list)
+        a = Schedule().matchtime()
+        print a
 
 
